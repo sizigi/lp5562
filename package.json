@@ -1,0 +1,33 @@
+{
+  "name": "lp5562",
+  "version": "0.1.0",
+  "description": "Assembler for the LP5562 4-Channel LED Driver",
+  "main": "out/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "node_modules/.bin/nearleyc src/grammar.ne -o src/grammar.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sizigi/lp5562.git"
+  },
+  "keywords": [
+    "lp5562",
+    "assembler",
+    "ti",
+    "led",
+    "driver",
+    "nearley"
+  ],
+  "author": "Cory Li",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sizigi/lp5562/issues"
+  },
+  "homepage": "https://github.com/sizigi/lp5562#readme",
+  "dependencies": {
+    "@types/core-js": "^0.9.41",
+    "core-js": "^2.4.1",
+    "nearley": "^2.10.0"
+  }
+}
