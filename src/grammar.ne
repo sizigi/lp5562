@@ -60,13 +60,13 @@ target ->
   | "123" {% v(0b111) %}
   
 section ->
-    ".ENGINE1" {% v("engine1") %}
-  | ".ENGINE2" {% v("engine2") %}
-  | ".ENGINE3" {% v("engine3") %}
+    (".ENGINE1" | ".engine1") {% v("engine1") %}
+  | (".ENGINE2" | ".engine2") {% v("engine2") %}
+  | (".ENGINE3" | ".engine3") {% v("engine3") %}
 
 # Numbers
-integer     -> [0-9]:+              {% d => parseInt(d[0].join("")) %}
-float       -> integer mantissa:?   {% d => d[0] + d[1] %}
+integer     -> "-":? [0-9]:+        {% d => parseInt(d[1].join("") * (d[0] ? -1 : 1)) %}
+float       -> integer mantissa:?   {% d => Math.sign(d[0]) * (Math.abs(d[0]) + d[1]) %}
 mantissa    -> "." [0-9]:*          {% d => parseFloat("0"+d.join('')) %}
 
 # Whitespace
