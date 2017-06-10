@@ -7,9 +7,11 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "outDir": "out",
+        "outDir": "dist",
         "allowJs": true,
         "strictNullChecks": true,
+        "experimentalDecorators": true,
+        "rootDir": "./src",
         "lib": [
             "es2015",
             "es5",
@@ -18,6 +20,6 @@
         ]
     },
     "include": [
-        "src/**/*"
+        "src"
     ]
 }

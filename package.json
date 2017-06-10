@@ -4,8 +4,9 @@
   "description": "Assembler for the LP5562 4-Channel LED Driver",
   "main": "out/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "node_modules/.bin/nearleyc src/grammar.ne -o src/grammar.js"
+    "test": "mocha dist/test",
+    "pretest": "tsc",
+    "prepare": "node_modules/.bin/nearleyc src/lib/grammar.ne -o src/lib/grammar.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,13 @@
   "homepage": "https://github.com/sizigi/lp5562#readme",
   "dependencies": {
     "@types/core-js": "^0.9.41",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^7.0.29",
     "core-js": "^2.4.1",
     "nearley": "^2.10.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2",
+    "mocha-typescript": "^1.1.4"
   }
 }

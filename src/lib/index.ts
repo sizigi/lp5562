@@ -86,7 +86,7 @@ export class Section {
   }
 }
 
-export class Program {
+export class LP5562Program {
   public sections: Map<SectionNames, Section> = new Map();
   public clock : number = 32.768;
   private _curSection : Section | null = null;
@@ -102,6 +102,19 @@ export class Program {
     this._curSection = section;
   }
 
+  public get bitstream() : Uint16Array {
+    const bs = new Uint16Array(3*16);
+    const e1 = this.sections.get('engine1');
+    const e2 = this.sections.get('engine2');
+    const e3 = this.sections.get('engine3');
+
+    if(e1) bs.set(e1.bitstream, 0);
+    if(e2) bs.set(e2.bitstream, 16);
+    if(e3) bs.set(e3.bitstream, 16*2);
+
+    return bs;
+  }
+
   private switchToSection(section : SectionNames) {
     if(this.sections.has(section)) {
       throw new Error(`${section} already declared`);
@@ -111,7 +124,7 @@ export class Program {
     }
   }
 
-  public assemble(data: string) {
+  public assemble(data: string) : void {
     const p = new nearley.Parser(grammar, grammar.ParserStart);
     const d = p.feed(data);
     const instructions: Array<INode> = d.results[0];
@@ -204,7 +217,13 @@ export class Program {
   }
 }
 
-let p = new Program();
-p.assemble('ramp 800, -128');
-let s1 = p.sections.get('engine1');
-console.log(s1!.bitstream);
+
+/**
+ * Takes in a assembly and returns the full 16 length instructino stream
+ * for all 3 engines as a Uint16Array
+ */
+export function assemble(assembly:string) : Uint16Array  {
+  const p = new LP5562Program();
+  p.assemble(assembly);
+  return p.bitstream;
+}

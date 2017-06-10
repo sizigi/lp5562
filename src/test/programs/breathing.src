@@ -1,0 +1,54 @@
+# engine 1 section start
+.ENGINE1
+  wait 5
+   trigger s23
+   ramp  500, 20
+   ramp  500, 50
+   ramp  200, 50
+   ramp  100, 50
+   ramp  200, 50
+   ramp  300, 50
+   ramp  300, -50
+   ramp  200, -50
+   ramp  100, -50
+   ramp  200, -50
+   ramp  500, -30
+   ramp  500, -30
+   wait 800
+   trigger w23
+
+# engine 2 section start
+.ENGINE2
+   trigger w1
+   wait 400
+   ramp  500, 20
+   ramp  500, 50
+   ramp  200, 50
+   ramp  100, 50
+   ramp  200, 50
+   ramp  300, 50
+   ramp  300, -50
+   ramp  200, -50
+   ramp  100, -50
+   ramp  200, -50
+   ramp  500, -30
+   ramp  500, -30
+   trigger s1
+
+# engine 3 section start
+.ENGINE3
+   trigger w1
+   wait 800
+   ramp  500, 20
+   ramp  500, 50
+   ramp  200, 50
+   ramp  100, 50
+   ramp  200, 50
+   ramp  300, 50
+   ramp  300, -50
+   ramp  200, -50
+   ramp  100, -50
+   ramp  200, -50
+   ramp  500, -30
+   ramp  500, -30
+   trigger s1
