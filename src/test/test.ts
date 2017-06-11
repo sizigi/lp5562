@@ -2,13 +2,13 @@ import * as assert from 'assert';
 import * as fs from 'fs';
 import {assemble} from '../lib/index';
 import {suite, test} from 'mocha-typescript';
-import {readHex, bufferEqual} from './util';
+import {readHex, assertEqualBuffer} from './util';
 
 @suite class UtilTest {
   @test bufferSimpleEqual() {
     let a = new Uint8Array(4).fill(0xAA);
     let b = new Uint16Array(2).fill(0xAAAA);
-    assert.equal(true, bufferEqual(a.buffer, b.buffer));
+    assertEqualBuffer(a.buffer, b.buffer);
   }
 
   @test bufferComplexEqual() {
@@ -17,13 +17,13 @@ import {readHex, bufferEqual} from './util';
     let dv = new DataView(b.buffer);
     dv.setUint16(0, 0xDEAD);
     dv.setUint16(2, 0xBEEF);
-    assert.equal(true, bufferEqual(a.buffer, b.buffer), "contents equal");
+    assertEqualBuffer(a.buffer, b.buffer);
   }
 
   @test bufferNotEqual() {
     let a = new Uint8Array([0xDE, 0xAD, 0xBE, 0xEF]);
     let b = new Uint16Array([0xCAFE, 0xBABE]);
-    assert.equal(false, bufferEqual(a.buffer, b.buffer), "contents not equal");
+    assert.throws(() => assertEqualBuffer(a.buffer, b.buffer));
   }
 
   @test fileCompare() {
@@ -34,6 +34,24 @@ import {readHex, bufferEqual} from './util';
     dv.setUint16(0, 0xBAAD);
     dv.setUint16(2, 0xF00D);
 
-    assert.equal(true, bufferEqual(a.buffer, b.buffer), 'file does not match code');
+    assertEqualBuffer(a.buffer, b.buffer);
   }
 }
+
+
+suite('CompilerTests', () => {
+  for(let i of ['blink', 'breathing', 'color_cycle', 'flash_with_afterglow', 'blink_and_color_change']) {
+    test(i, () => {
+      let a = readHex(`./src/test/programs/${i}.hex`);
+      let b = assemble(fs.readFileSync(`./src/test/programs/${i}.src`).toString());
+      assertEqualBuffer(a.buffer, b.buffer);
+    });
+  }
+});
+
+
+  // @test run() {
+  //   let a = readHex('./src/test/programs/breathing.hex');
+  //   let b = assemble(fs.readFileSync('./src/test/programs/breathing.src').toString());
+
+  //   assertEqualBuffer(a.buffer, b.buffer);

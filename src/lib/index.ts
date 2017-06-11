@@ -1,6 +1,8 @@
 import * as nearley from "nearley";
-import * as grammar from './grammar';
 import { Map } from 'core-js';
+
+import * as grammar from './grammar';
+import {buf2hex} from './util';
 
 type SectionNames = "engine1" | "engine2" | "engine3";
 interface ILabelNode {
@@ -58,18 +60,22 @@ function throwBadNode(n : INode) {
 export class Section {
   public readonly name : string;
   private readonly labels: Map<string, number> = new Map();
-  public readonly bitstream: Uint16Array = new Uint16Array(16);
+
+  public readonly bitstream : Uint16Array = new Uint16Array(16);
+  public readonly dataview: DataView = new DataView(this.bitstream.buffer);
+  public readonly number : number;
   private pc : number = 0;
 
   constructor(name : string) {
     this.name = name;
+    this.number = parseInt(name[name.length-1]);
   }
 
   public addInstruction(ins : number) {
-    if(this.pc >= 15 && ins != 0) {
+    if(this.pc > 15 && ins != 0) {
       throw new Error(`${this.name} Capacity Exceeded`)
     }
-    this.bitstream[this.pc++] = ins;
+    this.dataview.setInt16(this.pc++ * 2, ins);
   }
 
   public addLabel(name:string) {
@@ -140,13 +146,15 @@ export class LP5562Program {
           this.curSection.addInstruction(
             (0b111 << 13)
             | (i.wait << 7)
-            | (i.send << 1));
+            | (i.send << 1)
+            );
           break;
         case "end":
           this.curSection.addInstruction(
             (0b110 << 13)
             | (~~i.int << 12)
-            | (~~i.reset << 11));
+            | (~~i.reset << 11)
+            );
           break;
         case "start":
           this.curSection.addInstruction(0);
@@ -155,24 +163,28 @@ export class LP5562Program {
           if(i.count < 0 || i.count >= 64) {
             throw new Error(`Unsupported loop count: ${i.count}`);
           }
+
           this.curSection.addInstruction(
             (0b101 << 13)
             | i.count << 7
             | this.curSection.getLabel(i.target)
-          );
+
+            // the following is not strictly necessary but is required to match the TI compiler's
+            // output since they use absolute position in the DO NOT CARE bits.
+            | ((this.curSection.number - 1) & 0b111) << 4
+            );
           break;
         case "ramp":
-          let steps = i.steps;
-          let sign : boolean = steps < 0;
+          let steps = Math.abs(i.steps);
+          let decrease : boolean = i.steps < 0;
+          let increment : number;
 
-          if(steps == 1 || Math.abs(steps) > 128) {
+          if(steps == 1 || steps > 128) {
             throw new Error(`Invalid number of ramp steps ${steps}`);
-          }
-
-          if(steps > 0) {
-            steps -= 1;
-          } else if (steps < 0) {
-            steps += 1;
+          } else if (steps == 0) {
+            increment = 0;
+          } else {
+            increment  = steps - 1;
           }
 
           let calcCycles = (time:number, clock:number, prescaleFlag:number) => {
@@ -184,22 +196,22 @@ export class LP5562Program {
           }
 
           let guesses = [
-            calcCycles(i.time, this.clock / 16, 0),
-            calcCycles(i.time, this.clock / 512, 1),
+            calcCycles(i.time/(increment+1), this.clock / 16, 0),
+            calcCycles(i.time/(increment+1), this.clock / 512, 1),
           ];
 
           guesses = guesses.filter(g => g.cycles < 64 && g.cycles > 0);
           if(guesses.length == 0) {
             throw new Error(`Length ${i.time}ms outside of obtainable range (${1/(this.clock/16)}ms - ${63/(this.clock/512)}ms )`);
           }
-
           let res = guesses.reduce((prev, curr) => prev.difference < curr.difference ? prev : curr);
+
           this.curSection.addInstruction(
             (res.prescaleFlag << 14)
             | res.cycles << 8
-            | ~~sign << 7
-            | steps
-          );
+            | ~~decrease << 7
+            | increment
+            );
           break;
         case "pwm":
           if(i.value < 0 || i.value > 255) {

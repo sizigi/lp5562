@@ -1,0 +1,29 @@
+# engine 1 section start
+.ENGINE1
+loop1:
+set_pwm 255
+wait 200
+set_pwm 0
+wait 500
+branch 4, loop1
+end, i
+
+# engine 2 section start
+.ENGINE2
+loop2:
+set_pwm 255
+wait 200
+set_pwm 0
+wait 500
+branch 5, loop2
+end, i
+
+# engine 3 section start
+.ENGINE3
+loop3:
+set_pwm 255
+wait 200
+set_pwm 0
+wait 500
+branch 6, loop3
+end, i

@@ -27,7 +27,7 @@ command ->
   | "trigger" __ sendtarget
                 (sep waittarget          {% nth(1) %}
                 ):?                      {% d => ({node: 'trigger', send: d[2] ? d[2] : 0, wait: d[3] ? d[3] : 0})%}
-  | "end" (__ interruptsignal
+  | "end" (sep interruptsignal
             (sep interruptsignal         {% nth(1) %}
             ):?                          {% d => {const s = [d[1], d[2]]; return {reset: s.includes('r'), int: s.includes('i')}}%}
           ):?                            {% d => (Object.assign({node: 'end', reset: false, int: false}, d[1])) %}

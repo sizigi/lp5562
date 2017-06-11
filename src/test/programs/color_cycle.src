@@ -1,0 +1,26 @@
+# engine 1 section start
+.ENGINE1
+   ramp 1000, 127
+   ramp 1000, 127
+   ramp 1000, -127
+   ramp 1000, -127
+   ramp 1000, -127
+   ramp 1000, -127
+
+# engine 2 section start
+.ENGINE2
+   ramp 1000, -127
+   ramp 1000, -127
+   ramp 1000, 127
+   ramp 1000, 127
+   ramp 1000, -127
+   ramp 1000, -127
+
+# engine 3 section start
+.ENGINE3
+   ramp 1000, -127
+   ramp 1000, -127
+   ramp 1000, -127
+   ramp 1000, -127
+   ramp 1000, 127
+   ramp 1000, 127

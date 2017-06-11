@@ -39,7 +39,7 @@ var grammar = {
     {"name": "command$ebnf$2$subexpression$1$ebnf$1$subexpression$1", "symbols": ["sep", "interruptsignal"], "postprocess": nth(1)},
     {"name": "command$ebnf$2$subexpression$1$ebnf$1", "symbols": ["command$ebnf$2$subexpression$1$ebnf$1$subexpression$1"], "postprocess": id},
     {"name": "command$ebnf$2$subexpression$1$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
-    {"name": "command$ebnf$2$subexpression$1", "symbols": ["__", "interruptsignal", "command$ebnf$2$subexpression$1$ebnf$1"], "postprocess": d => {const s = [d[1], d[2]]; return {reset: s.includes('r'), int: s.includes('i')}}},
+    {"name": "command$ebnf$2$subexpression$1", "symbols": ["sep", "interruptsignal", "command$ebnf$2$subexpression$1$ebnf$1"], "postprocess": d => {const s = [d[1], d[2]]; return {reset: s.includes('r'), int: s.includes('i')}}},
     {"name": "command$ebnf$2", "symbols": ["command$ebnf$2$subexpression$1"], "postprocess": id},
     {"name": "command$ebnf$2", "symbols": [], "postprocess": function(d) {return null;}},
     {"name": "command", "symbols": ["command$string$8", "command$ebnf$2"], "postprocess": d => (Object.assign({node: 'end', reset: false, int: false}, d[1]))},
