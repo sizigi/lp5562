@@ -1,0 +1,9 @@
+.engine1
+  a_repeated_label:
+    wait 200
+    wait 300
+
+.engine2
+  a_repeated_label:
+    wait 100
+    wait 200

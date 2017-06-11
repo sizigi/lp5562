@@ -96,6 +96,7 @@ export class LP5562Program {
   public sections: Map<SectionNames, Section> = new Map();
   public clock : number = 32.768;
   private _curSection : Section | null = null;
+  private _globalLabelList : Set<string> = new Set();
 
   private get curSection() : Section {
     if(this._curSection === null) {
@@ -140,7 +141,13 @@ export class LP5562Program {
           this.switchToSection(i.name);
           break;
         case "label":
-          this.curSection.addLabel(i.name);
+          const name = i.name;
+          if(this._globalLabelList.has(name)) {
+            throw new Error(`Duplicate label "${name}" declared`);
+          } else {
+            this._globalLabelList.add(name);
+            this.curSection.addLabel(name);
+          }
           break;
         case "trigger":
           this.curSection.addInstruction(

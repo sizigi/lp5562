@@ -39,7 +39,7 @@ import {readHex, assertEqualBuffer} from './util';
 }
 
 
-suite('CompilerTests', () => {
+suite('ProgramTests', () => {
   for(let i of ['blink', 'breathing', 'color_cycle', 'flash_with_afterglow', 'blink_and_color_change']) {
     test(i, () => {
       let a = readHex(`./src/test/programs/${i}.hex`);
@@ -49,6 +49,23 @@ suite('CompilerTests', () => {
   }
 });
 
+
+
+let pgmCases = [
+  {name: 'double_label', error: /duplicate label/i},
+  {name: 'double_global_label', error: /duplicate label/i},
+]
+
+suite('BrokenPrograms', () => {
+  for(let c of pgmCases) {
+    test(c.name, () => {
+      let data = fs.readFileSync(`./src/test/cases/${c.name}.src`).toString();
+      assert.throws(() => {
+        assemble(data);
+      }, c.error)
+    });
+  }
+});
 
   // @test run() {
   //   let a = readHex('./src/test/programs/breathing.hex');
