@@ -57,7 +57,7 @@ function throwBadNode(n : INode) {
   throw new Error(`Unknown node type ${n.node}`);
 }
 
-export class Section {
+class Section {
   public readonly name : string;
   private readonly labels: Map<string, number> = new Map();
 
@@ -92,7 +92,7 @@ export class Section {
   }
 }
 
-export class LP5562Program {
+class LP5562Program {
   public sections: Map<SectionNames, Section> = new Map();
   public clock : number = 32.768;
   private _curSection : Section | null = null;
@@ -134,6 +134,11 @@ export class LP5562Program {
   public assemble(data: string) : void {
     const p = new nearley.Parser(grammar, grammar.ParserStart);
     const d = p.feed(data);
+
+    if(d.results.length == 0) {
+      throw new Error(`Invalid program. (Check that the first instruction is valid?)`);
+    }
+
     const instructions: Array<INode> = d.results[0];
     for (let i of instructions) {
       switch (i.node) {

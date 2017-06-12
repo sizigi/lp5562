@@ -54,6 +54,7 @@ suite('ProgramTests', () => {
 let pgmCases = [
   {name: 'double_label', error: /duplicate label/i},
   {name: 'double_global_label', error: /duplicate label/i},
+  {name: 'invalid_program', error: /invalid program/i},
 ]
 
 suite('BrokenPrograms', () => {
