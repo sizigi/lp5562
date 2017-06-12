@@ -5,7 +5,7 @@
   "main": "./dist/lib/index.js",
   "scripts": {
     "test": "mocha dist/test",
-    "compile": "tsc && node_modules/.bin/nearleyc src/lib/grammar.ne -o src/lib/grammar.js",
+    "compile": "node_modules/.bin/nearleyc src/lib/grammar.ne -o src/lib/grammar.js && tsc",
     "pretest": "npm run compile",
     "prepare": "npm run compile"
   },
