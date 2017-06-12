@@ -2,11 +2,12 @@
   "name": "lp5562",
   "version": "0.1.0",
   "description": "Assembler for the LP5562 4-Channel LED Driver",
-  "main": "out/index.js",
+  "main": "./dist/lib/index.js",
   "scripts": {
     "test": "mocha dist/test",
-    "pretest": "tsc",
-    "prepare": "node_modules/.bin/nearleyc src/lib/grammar.ne -o src/lib/grammar.js"
+    "compile": "tsc && node_modules/.bin/nearleyc src/lib/grammar.ne -o src/lib/grammar.js",
+    "pretest": "npm run compile",
+    "prepare": "npm run compile"
   },
   "repository": {
     "type": "git",
@@ -36,5 +37,6 @@
   "devDependencies": {
     "mocha": "^3.4.2",
     "mocha-typescript": "^1.1.4"
-  }
+  },
+  "types": "index.d.ts"
 }
