@@ -54,7 +54,7 @@ For the assembly language spec, see the [grammar](src/lib/grammar.ne). As a rule
 
 ## Contributing
 
-This project is MIT Licensed. Pull requests welcome.
+This project is MIT Licensed. Pull requests welcome. Changes documented in [CHANGELOG.md](CHANGELOG.md).
 
 [lp5562]: http://www.ti.com/product/LP5562
 [kso]: http://keyswitch.one
