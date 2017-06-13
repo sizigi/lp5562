@@ -22,10 +22,9 @@ var assemble = require('lp5562').assemble;
 
 Typescript definitions are included in the package. The function's signature is:
 
-**`assemble(program:string) : Uint16Array`**
+### `assemble(program : string) : Uint16Array`
 
 where `program` is the string representation of the assembly program, and the resulting `Uint16Array` is an array of 48 16-bit WORDs representing the memory map of LP5562's program space.
-
 
 ```typescript
 assemble(`
@@ -49,5 +48,13 @@ Produces:
 
 All data is provided in big-endian format (as the LP5562 is an 8-bit device). Feed the `Uint16Array#buffer` to a `Uint8Array` or use a `DataView` if you need a different data representation.
 
+## Grammar
+
+For the assembly language spec, see the [grammar](src/lib/grammar.ne). As a rule of thumb, all instructions that work on the official assembler provided with the evaluation module should work here as well. See §3.4.1 and §3.4.2 in the [EVM docs](docs/snvu203a.pdf) for syntax and parameters.
+
+## Contributing
+
+This project is MIT Licensed. Pull requests welcome.
+
 [lp5562]: http://www.ti.com/product/LP5562
-[kso]: keyswitch.one
+[kso]: http://keyswitch.one
