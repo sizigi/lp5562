@@ -1,6 +1,6 @@
 {
   "name": "lp5562",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Assembler for the LP5562 4-Channel LED Driver",
   "main": "./dist/lib/index.js",
   "scripts": {
